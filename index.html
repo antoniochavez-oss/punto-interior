@@ -3,346 +3,560 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- SEO primario -->
     <title>Punto Interior | Alta Carpintería en León, Gto.</title>
-    <meta name="description" content="Diseño y fabricación de mobiliario modular premium: cocinas, closets y vestidores en León, Guanajuato. Calidad y pasión en cada ensamble.">
+    <meta name="description" content="Diseño y fabricación de mobiliario modular premium: cocinas, closets y vestidores en León, Guanajuato.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://puntointerior.mx/">
-
-    <!-- Open Graph / redes sociales -->
-    <meta property="og:type"        content="website">
-    <meta property="og:url"         content="https://puntointerior.mx/">
-    <meta property="og:title"       content="Punto Interior | Alta Carpintería en León, Gto.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://puntointerior.mx/">
+    <meta property="og:title" content="Punto Interior | Alta Carpintería en León, Gto.">
     <meta property="og:description" content="Cocinas, closets y vestidores premium fabricados en León, Guanajuato.">
-    <meta property="og:image"       content="https://puntointerior.mx/og-image.jpg">
 
-    <!-- Preconexión de fuentes para reducir latencia -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-    <!-- Tailwind CDN (solo para prototipos; en producción usar CLI build) -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- GSAP diferido: no bloquea el renderizado inicial -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
 
     <style>
-        /* ─── Design tokens ──────────────────────────────────────────── */
         :root {
-            --color-bg:     #E5E1D8;
-            --color-bronze: #A68A56;
-            --color-dark:   #1A1A1A;
-            --color-white:  #FFFFFF;
-
-            --radius-card:  2rem;       /* 32px */
-            --transition-card: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            --bg:     #EFEBE4;
+            --dark:   #1C1C1A;
+            --bronze: #9E7D4F;
+            --bronze-light: #C4A97A;
+            --cream:  #FAF8F4;
+            --stone:  #7A7368;
         }
 
-        /* ─── Base ───────────────────────────────────────────────────── */
-        *,
-        *::before,
-        *::after { box-sizing: border-box; }
-
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
         body {
-            background-color: var(--color-bg);
-            color: var(--color-dark);
-            font-family: 'Inter', sans-serif;
-            /* Evita FOUC durante la carga de fuentes */
+            background: var(--bg);
+            color: var(--dark);
+            font-family: 'DM Sans', sans-serif;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
+        .serif { font-family: 'Cormorant Garamond', serif; }
 
-        /* ─── Utilidad tipográfica ───────────────────────────────────── */
-        .font-serif { font-family: 'Playfair Display', serif; }
-
-        /* ─── Navegación ─────────────────────────────────────────────── */
-        .site-nav {
-            position: fixed;
-            inset: 0 0 auto 0;     /* shorthand: top right bottom left */
-            z-index: 100;
-            background: rgb(255 255 255 / 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgb(0 0 0 / 0.05);
+        /* NAV */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+            padding: 1.25rem 2.5rem;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgb(239 235 228 / 0.88);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgb(0 0 0 / 0.06);
         }
+        .nav-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--dark); }
+        .nav-logo-mark { width: 22px; height: 32px; border: 2px solid var(--bronze); border-radius: 999px 999px 0 0; }
+        .nav-logo-text { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; }
+        .nav-links { display: flex; gap: 2.5rem; align-items: center; list-style: none; }
+        .nav-links a { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; color: var(--stone); transition: color 0.3s; }
+        .nav-links a:hover { color: var(--dark); }
+        .nav-cta { color: var(--dark) !important; border-bottom: 2px solid var(--bronze); padding-bottom: 2px; font-weight: 700 !important; }
 
-        /* ─── Bento grid ─────────────────────────────────────────────── */
-        .bento-container {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-auto-rows: 280px;
-            gap: 1.5rem;
+        /* HERO */
+        .hero {
+            min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr;
+            align-items: center; padding: 6rem 4rem 4rem;
+            max-width: 1400px; margin: 0 auto; gap: 4rem;
         }
-
-        /* Responsivo: 2 columnas en tablets */
-        @media (max-width: 900px) {
-            .bento-container { grid-template-columns: repeat(2, 1fr); }
-            .bento-card.col-span-2 { grid-column: span 1; }
+        .hero-eyebrow { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.35em; text-transform: uppercase; color: var(--bronze); margin-bottom: 1.5rem; }
+        .hero-title { font-size: clamp(4rem, 7vw, 7rem); line-height: 1.0; font-weight: 400; margin-bottom: 2rem; }
+        .hero-title em { font-style: italic; font-weight: 300; color: var(--stone); }
+        .hero-sub { font-size: 1rem; line-height: 1.8; color: var(--stone); max-width: 26rem; font-weight: 300; margin-bottom: 3rem; }
+        .hero-btn {
+            display: inline-flex; align-items: center; gap: 0.75rem;
+            background: var(--dark); color: white; padding: 1rem 2rem; border-radius: 999px;
+            font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+            text-decoration: none; transition: background 0.3s, transform 0.3s;
         }
+        .hero-btn:hover { background: var(--bronze); transform: scale(1.03); }
+        .hero-image-col { display: flex; justify-content: flex-end; align-items: center; gap: 1rem; }
+        .hero-img-main { width: 60%; aspect-ratio: 3/4; border-radius: 999px 999px 0 0; overflow: hidden; box-shadow: 0 40px 80px rgb(0 0 0 / 0.18); }
+        .hero-img-side { display: flex; flex-direction: column; gap: 1rem; width: 35%; }
+        .hero-img-side-top, .hero-img-side-bottom { aspect-ratio: 1; border-radius: 1.5rem; overflow: hidden; box-shadow: 0 20px 40px rgb(0 0 0 / 0.12); }
+        .hero-img-main img, .hero-img-side-top img, .hero-img-side-bottom img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-        /* Responsivo: 1 columna en móvil */
-        @media (max-width: 600px) {
-            .bento-container {
-                grid-template-columns: 1fr;
-                grid-auto-rows: auto;
-            }
-            .bento-card.col-span-2,
-            .bento-card.row-span-2 { grid-column: span 1; grid-row: span 1; }
+        /* STATS */
+        .stats { background: var(--dark); color: white; padding: 3rem 4rem; display: flex; justify-content: center; gap: 6rem; flex-wrap: wrap; }
+        .stat-item { text-align: center; }
+        .stat-num { font-size: 2.8rem; font-weight: 400; display: block; line-height: 1; margin-bottom: 0.5rem; }
+        .stat-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgb(255 255 255 / 0.45); }
+
+        /* SECTION HEADER */
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-eyebrow { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.35em; text-transform: uppercase; color: var(--bronze); display: block; margin-bottom: 1rem; }
+        .section-title { font-size: clamp(2.5rem, 4vw, 4rem); font-weight: 400; line-height: 1.1; }
+
+        /* GALLERY */
+        #galeria { padding: 7rem 3rem; max-width: 1400px; margin: 0 auto; }
+        .filter-tabs { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 3rem; flex-wrap: wrap; }
+        .filter-btn {
+            padding: 0.6rem 1.4rem; border: 1px solid rgb(0 0 0 / 0.12); border-radius: 999px;
+            background: transparent; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em;
+            text-transform: uppercase; cursor: pointer; transition: all 0.3s;
+            font-family: 'DM Sans', sans-serif; color: var(--stone);
         }
+        .filter-btn:hover, .filter-btn.active { background: var(--dark); color: white; border-color: var(--dark); }
+        .gallery-grid { columns: 4; column-gap: 1rem; }
+        .gallery-item { break-inside: avoid; margin-bottom: 1rem; border-radius: 1.25rem; overflow: hidden; cursor: pointer; position: relative; transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); }
+        .gallery-item:hover { transform: scale(1.02); }
+        .gallery-item img { width: 100%; display: block; transition: transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .gallery-item:hover img { transform: scale(1.05); }
+        .gallery-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgb(0 0 0 / 0.55) 0%, transparent 60%); opacity: 0; transition: opacity 0.4s; display: flex; align-items: flex-end; padding: 1.25rem; }
+        .gallery-item:hover .gallery-overlay { opacity: 1; }
+        .gallery-tag { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: white; background: var(--bronze); padding: 0.3rem 0.75rem; border-radius: 999px; }
 
-        .bento-card {
-            background: var(--color-white);
-            border-radius: var(--radius-card);
-            padding: 2.5rem;
-            border: 1px solid rgb(0 0 0 / 0.03);
-            transition:
-                transform  var(--transition-card),
-                box-shadow var(--transition-card),
-                border-color var(--transition-card);
-            position: relative;
-            overflow: hidden;
+        /* LIGHTBOX */
+        .lightbox { position: fixed; inset: 0; z-index: 1000; background: rgb(0 0 0 / 0.92); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s; }
+        .lightbox.open { opacity: 1; pointer-events: all; }
+        .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 1rem; }
+        .lightbox-close { position: absolute; top: 1.5rem; right: 2rem; background: none; border: none; color: white; font-size: 2rem; cursor: pointer; line-height: 1; }
+        .lightbox-prev, .lightbox-next { position: absolute; top: 50%; transform: translateY(-50%); background: rgb(255 255 255 / 0.1); border: 1px solid rgb(255 255 255 / 0.2); color: white; width: 3rem; height: 3rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; transition: background 0.3s; }
+        .lightbox-prev:hover, .lightbox-next:hover { background: var(--bronze); }
+        .lightbox-prev { left: 2rem; }
+        .lightbox-next { right: 2rem; }
+
+        /* SERVICIOS */
+        #servicios { background: var(--cream); padding: 7rem 3rem; }
+        .services-inner { max-width: 1400px; margin: 0 auto; }
+        .bento { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 260px; gap: 1rem; }
+        .bento-card { border-radius: 1.5rem; overflow: hidden; position: relative; transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), box-shadow 0.5s; }
+        .bento-card:hover { transform: translateY(-6px); box-shadow: 0 24px 48px rgb(0 0 0 / 0.1); }
+        .bento-text { background: var(--dark); color: white; padding: 2.5rem; display: flex; flex-direction: column; justify-content: space-between; }
+        .bento-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .bento-bronze { background: var(--bronze); color: white; padding: 2.5rem; display: flex; flex-direction: column; justify-content: flex-end; }
+        .bento-light { background: white; padding: 2.5rem; display: flex; flex-direction: column; justify-content: space-between; }
+        .service-list { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem; }
+        .service-list li { font-size: 0.8rem; color: rgb(255 255 255 / 0.6); display: flex; align-items: center; gap: 0.5rem; }
+        .service-list li::before { content: ''; width: 20px; height: 1px; background: var(--bronze-light); flex-shrink: 0; }
+
+        /* TESTIMONIOS */
+        #testimonios { padding: 7rem 3rem; max-width: 1400px; margin: 0 auto; }
+        .testimonios-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .testimonio-card { background: var(--cream); border-radius: 1.5rem; padding: 2.5rem; border: 1px solid rgb(0 0 0 / 0.05); transition: transform 0.4s, box-shadow 0.4s; }
+        .testimonio-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgb(0 0 0 / 0.07); }
+        .testimonio-card.featured { background: var(--dark); color: white; grid-row: span 2; display: flex; flex-direction: column; justify-content: space-between; }
+        .stars { display: flex; gap: 3px; margin-bottom: 1.25rem; }
+        .star { color: var(--bronze); font-size: 0.9rem; }
+        .testimonio-text { font-size: 1rem; line-height: 1.75; color: var(--stone); margin-bottom: 1.5rem; font-style: italic; }
+        .testimonio-card.featured .testimonio-text { color: rgb(255 255 255 / 0.65); font-size: 1.15rem; }
+        .testimonio-author { display: flex; align-items: center; gap: 0.75rem; }
+        .author-avatar { width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--bronze); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; color: white; flex-shrink: 0; }
+        .author-name { font-size: 0.8rem; font-weight: 700; display: block; }
+        .author-project { font-size: 0.7rem; color: var(--stone); }
+        .testimonio-card.featured .author-project { color: rgb(255 255 255 / 0.4); }
+        .testimonio-quote { font-size: 5rem; line-height: 0.8; color: var(--bronze); margin-bottom: 1.5rem; display: block; }
+
+        /* CONTACTO */
+        #contacto { background: var(--dark); padding: 7rem 3rem; color: white; }
+        .contacto-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
+        .contacto-title { font-size: clamp(2.5rem, 4vw, 4rem); font-weight: 400; line-height: 1.1; margin-bottom: 1.5rem; }
+        .contacto-title em { color: var(--bronze-light); }
+        .contacto-sub { font-size: 0.95rem; line-height: 1.8; color: rgb(255 255 255 / 0.5); margin-bottom: 3rem; font-weight: 300; }
+        .contact-items { display: flex; flex-direction: column; gap: 1.5rem; }
+        .contact-item { display: flex; gap: 1rem; align-items: flex-start; }
+        .contact-icon { width: 2.5rem; height: 2.5rem; border-radius: 0.75rem; background: rgb(255 255 255 / 0.06); border: 1px solid rgb(255 255 255 / 0.08); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+        .contact-label { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--bronze-light); display: block; margin-bottom: 0.25rem; }
+        .contact-value { font-size: 0.9rem; color: rgb(255 255 255 / 0.75); }
+        .contact-value a { color: inherit; text-decoration: none; transition: color 0.2s; }
+        .contact-value a:hover { color: white; }
+        .cta-group { display: flex; flex-direction: column; gap: 1rem; }
+        .cta-primary { display: flex; align-items: center; justify-content: center; gap: 0.75rem; background: #25D366; color: white; padding: 1.25rem 2.5rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; transition: transform 0.3s, opacity 0.3s; }
+        .cta-primary:hover { transform: scale(1.03); opacity: 0.92; }
+        .cta-secondary { display: flex; align-items: center; justify-content: center; gap: 0.75rem; background: transparent; color: white; border: 1px solid rgb(255 255 255 / 0.2); padding: 1.25rem 2.5rem; border-radius: 999px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; transition: border-color 0.3s, background 0.3s; }
+        .cta-secondary:hover { border-color: var(--bronze-light); background: rgb(255 255 255 / 0.04); }
+
+        /* FOOTER */
+        footer { background: #111; padding: 2.5rem 3rem; display: flex; justify-content: space-between; align-items: center; }
+        footer p { font-size: 0.65rem; color: rgb(255 255 255 / 0.25); letter-spacing: 0.2em; text-transform: uppercase; }
+        .footer-social a { font-size: 0.65rem; color: rgb(255 255 255 / 0.35); letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; transition: color 0.2s; }
+        .footer-social a:hover { color: var(--bronze-light); }
+
+        /* WA FLOAT */
+        .wa-float { position: fixed; bottom: 2rem; right: 2rem; background: var(--dark); color: white; padding: 0.875rem 1.5rem; border-radius: 999px; display: flex; align-items: center; gap: 0.625rem; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; z-index: 300; text-decoration: none; box-shadow: 0 8px 24px rgb(0 0 0 / 0.25); transition: background 0.3s, transform 0.3s; min-height: 44px; }
+        .wa-float:hover { background: var(--bronze); transform: scale(1.05); }
+
+        /* REVEAL */
+        .reveal { opacity: 0; transform: translateY(40px); }
+        @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .hero { grid-template-columns: 1fr; padding: 5rem 2rem 3rem; }
+            .hero-image-col { justify-content: center; }
+            .gallery-grid { columns: 3; }
+            .bento { grid-template-columns: repeat(2, 1fr); }
+            .testimonios-grid { grid-template-columns: 1fr 1fr; }
+            .testimonio-card.featured { grid-row: span 1; }
+            .contacto-inner { grid-template-columns: 1fr; gap: 3rem; }
         }
-
-        /* Respeta preferencia de movimiento reducido */
-        @media (prefers-reduced-motion: no-preference) {
-            .bento-card:hover {
-                transform: translateY(-8px);
-                box-shadow: 0 30px 60px rgb(0 0 0 / 0.08);
-                border-color: var(--color-bronze);
-            }
-        }
-
-        /* ─── Botón flotante WhatsApp ─────────────────────────────────── */
-        .wa-float {
-            position: fixed;
-            bottom: 1.875rem;   /* 30px */
-            right:  1.875rem;
-            background: var(--color-dark);
-            color: var(--color-white);
-            padding: 0.9375rem 1.5625rem;   /* 15px 25px */
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            gap: 0.625rem;
-            font-size: 0.6875rem;
-            font-weight: 800;
-            letter-spacing: 0.125em;
-            z-index: 1000;
-            box-shadow: 0 15px 30px rgb(0 0 0 / 0.2);
-            transition: background 0.4s ease, transform 0.4s ease;
-            /* Accesibilidad: área mínima de toque 44×44 px */
-            min-height: 44px;
-        }
-
-        @media (prefers-reduced-motion: no-preference) {
-            .wa-float:hover {
-                background: var(--color-bronze);
-                transform: scale(1.05);
-            }
-        }
-
-        /* ─── Animación de entrada (GSAP target) ─────────────────────── */
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-        }
-
-        /* Sin animación si el usuario lo prefiere */
-        @media (prefers-reduced-motion: reduce) {
-            .reveal { opacity: 1; transform: none; }
-        }
-
-        /* ─── Imagen hero ────────────────────────────────────────────── */
-        .hero-image-wrapper {
-            width: 100%;
-            max-width: 28rem;   /* max-w-md */
-            aspect-ratio: 3 / 4;
-            border-radius: 999px 999px 0 0;
-            overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-        }
-
-        .hero-image-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            /* Evita el salto de layout antes de cargar */
-            display: block;
+        @media (max-width: 640px) {
+            .nav { padding: 1rem 1.25rem; }
+            .nav-links { display: none; }
+            .hero { padding: 4.5rem 1.25rem 2rem; }
+            .hero-title { font-size: 3rem; }
+            .hero-img-side { display: none; }
+            .hero-img-main { width: 100%; }
+            .gallery-grid { columns: 2; }
+            #galeria, #servicios, #testimonios, #contacto { padding: 4rem 1.25rem; }
+            .bento { grid-template-columns: 1fr; grid-auto-rows: 220px; }
+            .testimonios-grid { grid-template-columns: 1fr; }
+            .stats { padding: 2rem 1.25rem; gap: 2rem; }
+            footer { flex-direction: column; gap: 1rem; text-align: center; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ── Navegación ─────────────────────────────────────────────────── -->
-    <nav class="site-nav" aria-label="Navegación principal">
-        <div class="max-w-7xl mx-auto px-8 py-6 flex justify-between items-center">
+<!-- NAV -->
+<nav class="nav" aria-label="Navegación principal">
+    <a href="/" class="nav-logo" aria-label="Punto Interior – Inicio">
+        <div class="nav-logo-mark" aria-hidden="true"></div>
+        <span class="nav-logo-text">Punto Interior</span>
+    </a>
+    <ul class="nav-links">
+        <li><a href="#galeria">Galería</a></li>
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#testimonios">Testimonios</a></li>
+        <li><a href="https://wa.me/524771234567?text=Hola!%20Me%20interesa%20una%20cotización." class="nav-cta" rel="noopener noreferrer" target="_blank">Cotizar</a></li>
+    </ul>
+</nav>
 
-            <!-- Logo: aria-label describe el enlace para lectores de pantalla -->
-            <a href="/" class="flex items-center gap-3" aria-label="Punto Interior – Inicio">
-                <div class="w-6 h-9 border-2 border-amber-800 rounded-t-full" aria-hidden="true"></div>
-                <span class="font-bold tracking-[0.2em] text-xs uppercase">Punto Interior</span>
-            </a>
-
-            <a
-                href="https://wa.me/524771234567?text=Hola!%20Me%20interesa%20una%20cotización."
-                class="text-[10px] font-bold tracking-widest border-b-2 border-amber-800 pb-1"
-                aria-label="Solicitar cotización por WhatsApp"
-                rel="noopener noreferrer"
-                target="_blank"
-            >
-                COTIZAR
-            </a>
+<!-- HERO -->
+<main>
+<section class="hero" aria-labelledby="hero-heading">
+    <div class="reveal">
+        <p class="hero-eyebrow">León, Guanajuato · Desde 2020</p>
+        <h1 id="hero-heading" class="serif hero-title">
+            Mobiliario<br><em>con legado.</em>
+        </h1>
+        <p class="hero-sub">
+            Diseñamos y fabricamos cocinas, vestidores y centros de entretenimiento a medida, con materiales premium y acabados que duran décadas.
+        </p>
+        <a href="https://wa.me/524771234567?text=Hola!%20Me%20interesa%20una%20cotización%20para%20un%20proyecto."
+           class="hero-btn" rel="noopener noreferrer" target="_blank">
+            <span>💬</span><span>Solicitar cotización</span>
+        </a>
+    </div>
+    <div class="hero-image-col reveal">
+        <div class="hero-img-main">
+            <img src="foto-08.png" alt="Cocina integral negra con iluminación LED de Punto Interior" loading="eager" fetchpriority="high" width="600" height="800">
         </div>
-    </nav>
+        <div class="hero-img-side">
+            <div class="hero-img-side-top">
+                <img src="foto-03.png" alt="Centro de entretenimiento flotante con vitrinas iluminadas" loading="eager" width="300" height="300">
+            </div>
+            <div class="hero-img-side-bottom">
+                <img src="foto-09.png" alt="Mueble de baño flotante con cubierta de mármol" loading="eager" width="300" height="300">
+            </div>
+        </div>
+    </div>
+</section>
 
-    <!-- ── Hero ──────────────────────────────────────────────────────── -->
-    <main>
-        <section
-            class="min-h-screen flex items-center px-8 pt-20"
-            aria-labelledby="hero-heading"
-        >
-            <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-20 items-center">
+<!-- STATS -->
+<div class="stats reveal" role="region" aria-label="Cifras de Punto Interior">
+    <div class="stat-item">
+        <span class="serif stat-num">+200</span>
+        <span class="stat-label">Proyectos entregados</span>
+    </div>
+    <div class="stat-item">
+        <span class="serif stat-num">5+</span>
+        <span class="stat-label">Años de experiencia</span>
+    </div>
+    <div class="stat-item">
+        <span class="serif stat-num">100%</span>
+        <span class="stat-label">Fabricación propia</span>
+    </div>
+    <div class="stat-item">
+        <span class="serif stat-num">León</span>
+        <span class="stat-label">Guanajuato, México</span>
+    </div>
+</div>
 
-                <div class="reveal">
-                    <span class="text-amber-800 font-bold tracking-[0.3em] text-[10px] uppercase">
-                        León, Guanajuato
-                    </span>
+<!-- GALERÍA -->
+<section id="galeria" aria-labelledby="galeria-heading">
+    <div class="section-header reveal">
+        <span class="section-eyebrow">Portafolio</span>
+        <h2 id="galeria-heading" class="serif section-title">Nuestros proyectos</h2>
+    </div>
+    <div class="filter-tabs" role="tablist">
+        <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">Todos</button>
+        <button class="filter-btn" data-filter="cocina" role="tab" aria-selected="false">Cocinas</button>
+        <button class="filter-btn" data-filter="tv" role="tab" aria-selected="false">Centros de TV</button>
+        <button class="filter-btn" data-filter="bano" role="tab" aria-selected="false">Baños</button>
+        <button class="filter-btn" data-filter="comercial" role="tab" aria-selected="false">Comercial</button>
+    </div>
+    <div class="gallery-grid" id="galleryGrid">
+        <div class="gallery-item reveal" data-cat="cocina" data-index="0"><img src="foto-01.png" alt="Cocina integral en L con madera nogal e iluminación LED" loading="lazy"><div class="gallery-overlay"><span class="gallery-tag">Cocina integral</span></div></div>
+        <div class="gallery-item reveal" data-cat="cocina" data-index="1"><img src="foto-02.png" alt="Alacena superior con vinoteca decorativa iluminada" loading="lazy"><div class="gallery-overlay"><span class="gallery-tag">Cocina · Detalle</span></div></div>
+        <div class="gallery-item reveal" data-cat="tv" data-index="2"><img src="foto-03.png" alt="Centro de entretenimiento flotante con slats de madera" loading="lazy"><div class="gallery-overlay"><span class="gallery-tag">Centro de TV</span></div></div>
+        <div class="gallery-item reveal" data-cat="cocina" data-index="3"><img src="foto-04.png" alt="Cocina con gabinetes negros abatibles e iluminación LED" loading="lazy"><div class="gallery-overlay"><span class="gallery-tag">Cocina moderna</span></div></div>
+        <div class="gallery-item reveal" data-cat="comercial" data-index="4"><img src="foto-05.png" alt="Cocina de oficina con muebles de madera natural" loading="lazy"><div class="gallery-overlay"><span class="gallery-tag">Cocina comercial</span></div></div>
+        <div class="gallery-item reveal" data-cat="bano" data-index="5"><img src="foto-06.png" alt="Mueblería de baño clínica en blanco minimalista" loading="lazy"><div class="gallery-overlay"><span class="gallery-tag">Mueble de baño</span></div></div>
+        <div class="gallery-item reveal" data-cat="cocina" data-index="6"><img src="foto-07.png" alt="Parrilla de gas empotrada en cubierta negra texturizada" loading="lazy"><div class="gallery-overlay"><span class="gallery-tag">Cocina · Detalle</span></div></div>
+        <div class="gallery-item reveal" data-cat="cocina" data-index="7"><img src="foto-08.png" alt="Cocina lineal gabinetes grises y blancos cubierta negra" loading="lazy"><div class="gallery-overlay"><span class="gallery-tag">Cocina lineal</span></div></div>
+        <div class="gallery-item reveal" data-cat="bano" data-index="8"><img src="foto-09.png" alt="Mueble flotante de baño madera clara con mármol gris" loading="lazy"><div class="gallery-overlay"><span class="gallery-tag">Mueble flotante</span></div></div>
+        <div class="gallery-item reveal" data-cat="tv" data-index="9"><img src="foto-10.png" alt="Centro de entretenimiento suspendido con vitrinas laterales" loading="lazy"><div class="gallery-overlay"><span class="gallery-tag">Centro de TV</span></div></div>
+        <div class="gallery-item reveal" data-cat="cocina" data-index="10"><img src="foto-11.png" alt="Cocina con acabados de madera y barra de desayuno" loading="lazy"><div class="gallery-overlay"><span class="gallery-tag">Cocina</span></div></div>
+        <div class="gallery-item reveal" data-cat="cocina" data-index="11"><img src="foto-12.png" alt="Detalle herrajes y cajones de cocina premium" loading="lazy"><div class="gallery-overlay"><span class="gallery-tag">Detalle</span></div></div>
+        <div class="gallery-item reveal" data-cat="tv" data-index="12"><img src="foto-13.png" alt="Mueble de TV empotrado con iluminación ambiental" loading="lazy"><div class="gallery-overlay"><span class="gallery-tag">Centro de TV</span></div></div>
+        <div class="gallery-item reveal" data-cat="comercial" data-index="13"><img src="foto-14.png" alt="Mueblería comercial a medida" loading="lazy"><div class="gallery-overlay"><span class="gallery-tag">Comercial</span></div></div>
+        <div class="gallery-item reveal" data-cat="cocina" data-index="14"><img src="foto-15.png" alt="Cocina residencial con acabados de lujo" loading="lazy"><div class="gallery-overlay"><span class="gallery-tag">Cocina</span></div></div>
+        <div class="gallery-item reveal" data-cat="cocina" data-index="15"><img src="foto-16.png" alt="Detalle de cocina con iluminación interior" loading="lazy"><div class="gallery-overlay"><span class="gallery-tag">Detalle</span></div></div>
+        <div class="gallery-item reveal" data-cat="bano" data-index="16"><img src="foto-17.png" alt="Mueble de baño moderno con cubierta de piedra" loading="lazy"><div class="gallery-overlay"><span class="gallery-tag">Baño</span></div></div>
+        <div class="gallery-item reveal" data-cat="cocina" data-index="17"><img src="foto-18.png" alt="Cocina moderna con isla y acabados premium" loading="lazy"><div class="gallery-overlay"><span class="gallery-tag">Cocina</span></div></div>
+        <div class="gallery-item reveal" data-cat="comercial" data-index="18"><img src="foto-19.png" alt="Proyecto comercial con mobiliario a medida" loading="lazy"><div class="gallery-overlay"><span class="gallery-tag">Comercial</span></div></div>
+        <div class="gallery-item reveal" data-cat="tv" data-index="19"><img src="foto-20.png" alt="Centro de entretenimiento con vitrinas y cajones flotantes" loading="lazy"><div class="gallery-overlay"><span class="gallery-tag">Centro de TV</span></div></div>
+    </div>
+</section>
 
-                    <h1 id="hero-heading" class="text-6xl md:text-8xl font-serif leading-[1.1] mt-6">
-                        Mobiliario <br>
-                        <em class="font-light not-italic italic">con legado.</em>
-                    </h1>
-
-                    <p class="mt-10 text-stone-500 max-w-sm text-lg leading-relaxed font-light">
-                        Diseñamos y fabricamos cocinas, vestidores y centros de TV
-                        con pasión y calidad premium.
+<!-- SERVICIOS -->
+<section id="servicios" aria-labelledby="servicios-heading">
+    <div class="services-inner">
+        <div class="section-header reveal">
+            <span class="section-eyebrow">Lo que hacemos</span>
+            <h2 id="servicios-heading" class="serif section-title">Nuestras soluciones</h2>
+        </div>
+        <div class="bento">
+            <div class="bento-card bento-text reveal" style="grid-column:span 2; grid-row:span 2;">
+                <div>
+                    <h3 class="serif" style="font-size:2.5rem; font-weight:400; line-height:1.2;">Diseño a<br><em style="color:var(--bronze-light);">tu medida.</em></h3>
+                    <p style="font-size:0.85rem; color:rgb(255 255 255 / 0.45); line-height:1.8; margin-top:1rem;">
+                        Cada proyecto inicia con una consulta sin costo donde entendemos tu espacio, estilo y presupuesto. Fabricamos en León y entregamos instalado.
                     </p>
                 </div>
+                <ul class="service-list">
+                    <li>Cocinas Integrales</li>
+                    <li>Closets &amp; Vestidores</li>
+                    <li>Centros de Entretenimiento</li>
+                    <li>Mobiliario de Baño</li>
+                    <li>Proyectos Comerciales</li>
+                </ul>
+            </div>
+            <div class="bento-card bento-photo reveal"><img src="foto-04.png" alt="Cocina con iluminación LED negra"></div>
+            <div class="bento-card bento-bronze reveal">
+                <p style="font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:0.75rem; opacity:0.7;">Garantía</p>
+                <p class="serif" style="font-size:1.6rem; font-weight:400; line-height:1.2;">Calidad que se ve<br>y se siente.</p>
+            </div>
+            <div class="bento-card bento-photo reveal"><img src="foto-10.png" alt="Centro de TV con vitrinas iluminadas"></div>
+            <div class="bento-card bento-light reveal">
+                <p style="font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:0.5rem; color:var(--stone);">Showroom</p>
+                <address style="font-style:normal;">
+                    <p class="serif" style="font-size:1.05rem; line-height:1.6;">Av México 701, local F,<br>Col. Moderna, León, Gto.</p>
+                    <p style="font-size:0.7rem; color:var(--stone); margin-top:1rem;">C.P. 37328</p>
+                </address>
+            </div>
+        </div>
+    </div>
+</section>
 
-                <!-- Imagen con alt descriptivo y carga eager (above the fold) -->
-                <div class="relative flex justify-end reveal">
-                    <div class="hero-image-wrapper">
-                        <img
-                            src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&q=80&w=800"
-                            alt="Cocina moderna de madera con acabados premium diseñada por Punto Interior"
-                            loading="eager"
-                            fetchpriority="high"
-                            width="800"
-                            height="1067"
-                        >
+<!-- TESTIMONIOS -->
+<section id="testimonios" aria-labelledby="testimonios-heading">
+    <div class="section-header reveal">
+        <span class="section-eyebrow">Clientes</span>
+        <h2 id="testimonios-heading" class="serif section-title">Lo que dicen de nosotros</h2>
+    </div>
+    <div class="testimonios-grid">
+        <div class="testimonio-card featured reveal">
+            <div>
+                <span class="serif testimonio-quote">"</span>
+                <p class="testimonio-text serif" style="font-size:1.35rem;">"Desde el diseño hasta la instalación, todo fue perfecto. Mi cocina quedó exactamente como la visualicé. ¡100% recomendados!"</p>
+            </div>
+            <div class="testimonio-author">
+                <div class="author-avatar">MR</div>
+                <div>
+                    <span class="author-name">María Ramírez</span>
+                    <span class="author-project">Cocina integral · León, Gto.</span>
+                </div>
+            </div>
+        </div>
+        <div class="testimonio-card reveal">
+            <div class="stars" aria-label="5 de 5 estrellas"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+            <p class="testimonio-text">"El centro de TV quedó increíble. La iluminación LED le da un toque muy premium. Calidad excelente y entregaron a tiempo."</p>
+            <div class="testimonio-author">
+                <div class="author-avatar">JL</div>
+                <div>
+                    <span class="author-name">Jorge López</span>
+                    <span class="author-project">Centro de entretenimiento</span>
+                </div>
+            </div>
+        </div>
+        <div class="testimonio-card reveal">
+            <div class="stars" aria-label="5 de 5 estrellas"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+            <p class="testimonio-text">"Nos hicieron la cocina de la oficina y todos los colaboradores están encantados. Muy profesionales y atentos al detalle."</p>
+            <div class="testimonio-author">
+                <div class="author-avatar">AS</div>
+                <div>
+                    <span class="author-name">Ana Sánchez</span>
+                    <span class="author-project">Proyecto comercial</span>
+                </div>
+            </div>
+        </div>
+        <div class="testimonio-card reveal">
+            <div class="stars" aria-label="5 de 5 estrellas"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+            <p class="testimonio-text">"El closet aprovecha cada centímetro. Los materiales se ven y se sienten de alta calidad. Muy satisfecha con el resultado."</p>
+            <div class="testimonio-author">
+                <div class="author-avatar">PG</div>
+                <div>
+                    <span class="author-name">Patricia Gutiérrez</span>
+                    <span class="author-project">Vestidor a medida</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto" aria-labelledby="contacto-heading">
+    <div class="contacto-inner">
+        <div class="reveal">
+            <h2 id="contacto-heading" class="serif contacto-title">¿Listo para tu<br><em>próximo proyecto?</em></h2>
+            <p class="contacto-sub">Cuéntanos tu idea. Te respondemos en menos de 24 horas con una propuesta personalizada sin costo.</p>
+            <div class="contact-items">
+                <div class="contact-item">
+                    <div class="contact-icon" aria-hidden="true">📍</div>
+                    <div>
+                        <span class="contact-label">Showroom</span>
+                        <p class="contact-value">Av México 701, local F, Col. Moderna<br>León, Guanajuato · C.P. 37328</p>
                     </div>
                 </div>
-
-            </div>
-        </section>
-
-        <!-- ── Bento grid ─────────────────────────────────────────────── -->
-        <section
-            class="max-w-7xl mx-auto px-8 py-32"
-            aria-label="Información de servicios y contacto"
-        >
-            <div class="bento-container">
-
-                <!-- Servicios -->
-                <div class="bento-card col-span-2 row-span-2 bg-[#1A1A1A] text-white reveal">
-                    <h2 class="text-4xl font-serif mb-6">
-                        Nuestras <br> Soluciones
-                    </h2>
-                    <ul class="space-y-4 opacity-70 text-sm" aria-label="Lista de servicios">
-                        <li>— Cocinas Integrales</li>
-                        <li>— Closets &amp; Vestidores</li>
-                        <li>— Centros de Entretenimiento</li>
-                        <li>— Mobiliario Modular</li>
-                    </ul>
+                <div class="contact-item">
+                    <div class="contact-icon" aria-hidden="true">📱</div>
+                    <div>
+                        <span class="contact-label">WhatsApp</span>
+                        <p class="contact-value"><a href="https://wa.me/524771234567" rel="noopener noreferrer" target="_blank">+52 477 123 4567</a></p>
+                    </div>
                 </div>
-
-                <!-- Ubicación -->
-                <address class="bento-card col-span-2 not-italic reveal">
-                    <h3 class="text-[10px] font-bold tracking-[0.3em] uppercase text-amber-800 mb-4">
-                        Ubicación
-                    </h3>
-                    <p class="text-xl font-serif">
-                        Av México 701, local F,<br>
-                        Colonia Moderna, León, Gto.
-                    </p>
-                    <p class="mt-8 text-[10px] font-bold opacity-40">C.P. 37328</p>
-                </address>
-
-                <!-- Instagram -->
-                <a
-                    href="https://instagram.com/puntointerior.mx"
-                    class="bento-card flex flex-col justify-between hover:bg-amber-50 reveal"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    aria-label="Visitar @puntointerior.mx en Instagram"
-                >
-                    <h3 class="font-bold tracking-widest text-[10px] uppercase">Instagram</h3>
-                    <span class="text-xl font-serif italic text-amber-800">@puntointerior.mx</span>
-                </a>
-
-                <!-- Tagline -->
-                <div class="bento-card reveal" aria-hidden="true">
-                    <p class="text-xs leading-relaxed text-stone-400">
-                        Pasión y calidad en cada ensamble.
-                    </p>
+                <div class="contact-item">
+                    <div class="contact-icon" aria-hidden="true">📸</div>
+                    <div>
+                        <span class="contact-label">Instagram</span>
+                        <p class="contact-value"><a href="https://instagram.com/puntointerior.mx" rel="noopener noreferrer" target="_blank">@puntointerior.mx</a></p>
+                    </div>
                 </div>
-
             </div>
-        </section>
-    </main>
+        </div>
+        <div class="cta-group reveal">
+            <a href="https://wa.me/524771234567?text=Hola!%20Me%20interesa%20una%20cotización%20para%20un%20proyecto." class="cta-primary" rel="noopener noreferrer" target="_blank">
+                <span>💬</span><span>Cotizar por WhatsApp</span>
+            </a>
+            <a href="https://instagram.com/puntointerior.mx" class="cta-secondary" rel="noopener noreferrer" target="_blank">
+                <span>📸</span><span>Ver más en Instagram</span>
+            </a>
+            <p style="font-size:0.7rem; color:rgb(255 255 255 / 0.25); text-align:center; margin-top:0.5rem;">Respondemos en menos de 24 horas</p>
+        </div>
+    </div>
+</section>
+</main>
 
-    <!-- ── WhatsApp flotante ──────────────────────────────────────────── -->
-    <a
-        href="https://wa.me/524771234567?text=Hola!%20Me%20interesa%20una%20cotización%20para%20un%20proyecto."
-        class="wa-float uppercase"
-        rel="noopener noreferrer"
-        target="_blank"
-        aria-label="Abrir chat de WhatsApp con Punto Interior"
-    >
-        <span aria-hidden="true">💬</span>
-        <span>Hablar por WhatsApp</span>
-    </a>
+<!-- FOOTER -->
+<footer>
+    <p>Punto Interior &copy; <span id="js-year">2026</span> &bull; Alta Carpintería &amp; Diseño &bull; León, Gto.</p>
+    <div class="footer-social">
+        <a href="https://instagram.com/puntointerior.mx" rel="noopener noreferrer" target="_blank">Instagram @puntointerior.mx</a>
+    </div>
+</footer>
 
-    <!-- ── Footer ─────────────────────────────────────────────────────── -->
-    <footer class="py-20 border-t border-black/5 text-center">
-        <p class="text-[10px] text-stone-400 uppercase tracking-[0.4em]">
-            Punto Interior &copy; <span id="js-year">2026</span> &bull; Alta Carpintería &amp; Diseño
-        </p>
-    </footer>
+<!-- WA FLOAT -->
+<a href="https://wa.me/524771234567?text=Hola!%20Me%20interesa%20una%20cotización%20para%20un%20proyecto."
+   class="wa-float" rel="noopener noreferrer" target="_blank" aria-label="Abrir chat de WhatsApp">
+    <span aria-hidden="true">💬</span><span>WhatsApp</span>
+</a>
 
-    <!-- ── Scripts ────────────────────────────────────────────────────── -->
-    <script>
-        /* Año dinámico en el footer */
-        const yearEl = document.getElementById('js-year');
-        if (yearEl) yearEl.textContent = new Date().getFullYear();
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Imagen ampliada">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Cerrar">✕</button>
+    <button class="lightbox-prev" id="lightboxPrev" aria-label="Anterior">‹</button>
+    <img id="lightboxImg" src="" alt="">
+    <button class="lightbox-next" id="lightboxNext" aria-label="Siguiente">›</button>
+</div>
 
-        /* GSAP: corre solo si las librerías cargaron (scripts defer) */
-        window.addEventListener('load', () => {
-            if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+<script>
+    /* Año footer */
+    const yearEl = document.getElementById('js-year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-            gsap.registerPlugin(ScrollTrigger);
+    /* Filtros de galería */
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const galleryItems = document.querySelectorAll('.gallery-item');
 
-            /* Respeta preferencia de movimiento reducido */
-            const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            if (prefersReduced) return;
-
-            gsap.utils.toArray('.reveal').forEach((elem) => {
-                gsap.to(elem, {
-                    scrollTrigger: {
-                        trigger: elem,
-                        start: 'top 90%',
-                        once: true,         /* evita re-trigger al hacer scroll hacia arriba */
-                    },
-                    opacity: 1,
-                    y: 0,
-                    duration: 1.5,
-                    ease: 'power4.out',
-                });
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+            btn.classList.add('active');
+            btn.setAttribute('aria-selected','true');
+            const f = btn.dataset.filter;
+            galleryItems.forEach(item => {
+                item.style.display = (f === 'all' || item.dataset.cat === f) ? 'block' : 'none';
             });
         });
-    </script>
+    });
+
+    /* Lightbox */
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    let currentIndex = 0;
+
+    galleryItems.forEach(item => {
+        item.addEventListener('click', () => {
+            currentIndex = parseInt(item.dataset.index);
+            openLightbox(currentIndex);
+        });
+    });
+
+    function openLightbox(index) {
+        const items = [...galleryItems];
+        const img = items[index]?.querySelector('img');
+        if (!img) return;
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        lightbox.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+
+    document.getElementById('lightboxPrev').addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
+        openLightbox(currentIndex);
+    });
+
+    document.getElementById('lightboxNext').addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % galleryItems.length;
+        openLightbox(currentIndex);
+    });
+
+    document.addEventListener('keydown', e => {
+        if (!lightbox.classList.contains('open')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') document.getElementById('lightboxPrev').click();
+        if (e.key === 'ArrowRight') document.getElementById('lightboxNext').click();
+    });
+
+    /* GSAP */
+    window.addEventListener('load', () => {
+        if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.utils.toArray('.reveal').forEach(el => {
+            gsap.to(el, {
+                scrollTrigger: { trigger: el, start: 'top 90%', once: true },
+                opacity: 1, y: 0, duration: 1.2, ease: 'power4.out',
+            });
+        });
+    });
+</script>
 
 </body>
 </html>
