@@ -35,171 +35,126 @@
         body { background: var(--bg); color: var(--dark); font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
         .serif { font-family: 'Cormorant Garamond', serif; }
 
-        /* ── LOADING SCREEN ─────────────────────────────────────────── */
+        /* ── LOADING SCREEN ───────────────────────────────────────────── */
         #loader {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
+            position: fixed; inset: 0; z-index: 9999;
             background: var(--dark);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 2rem;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 1.75rem;
+            transition: opacity 0.9s ease, visibility 0.9s ease;
+        }
+        #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+        .loader-logo-wrap {
+            position: relative;
+            width: 140px; height: 140px;
+            display: flex; align-items: center; justify-content: center;
         }
 
-        #loader.hidden {
+        /* Blur glow rings */
+        .loader-ring {
+            position: absolute; inset: 0;
+            border-radius: 50%;
+            animation: ringPulse 2.6s ease-in-out infinite;
+        }
+        .loader-ring-1 {
+            background: radial-gradient(circle, rgba(212,175,106,0.22) 0%, transparent 68%);
+            inset: -28px;
+        }
+        .loader-ring-2 {
+            background: radial-gradient(circle, rgba(212,175,106,0.10) 0%, transparent 60%);
+            inset: -8px;
+            animation-delay: 0.5s;
+        }
+        @keyframes ringPulse {
+            0%,100% { opacity: 0.35; transform: scale(0.94); }
+            50%      { opacity: 1;    transform: scale(1.06); }
+        }
+
+        /* Logo image — golden tint via CSS filter */
+        .loader-logo-img {
+            width: 120px; height: 120px;
+            object-fit: contain;
+            position: relative; z-index: 1;
+            /* White logo tinted gold */
+            filter: brightness(0) saturate(100%) invert(72%) sepia(40%) saturate(600%) hue-rotate(5deg) brightness(105%);
             opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
+            animation: logoAppear 0.8s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
         }
-
-        .loader-logo {
-            position: relative;
-            width: 120px;
-            height: 120px;
-        }
-
-        /* Glow blur rings */
-        .loader-glow {
-            position: absolute;
-            inset: -30px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(212,175,106,0.18) 0%, transparent 70%);
-            animation: loaderPulse 2.4s ease-in-out infinite;
-        }
-
-        .loader-glow-2 {
-            position: absolute;
-            inset: -10px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(212,175,106,0.1) 0%, transparent 65%);
-            animation: loaderPulse 2.4s ease-in-out infinite 0.4s;
-        }
-
-        @keyframes loaderPulse {
-            0%, 100% { opacity: 0.4; transform: scale(0.95); }
-            50%       { opacity: 1;   transform: scale(1.05); }
-        }
-
-        .loader-svg {
-            width: 120px;
-            height: 120px;
-            position: relative;
-            z-index: 1;
-            animation: loaderFadeIn 0.6s ease forwards;
-        }
-
-        @keyframes loaderFadeIn {
-            from { opacity: 0; transform: scale(0.85); }
+        @keyframes logoAppear {
+            from { opacity: 0; transform: scale(0.82); }
             to   { opacity: 1; transform: scale(1); }
-        }
-
-        /* Draw-on animation for loader paths */
-        .loader-path {
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-            animation: drawPath 1.8s cubic-bezier(0.4,0,0.2,1) forwards;
-        }
-        .loader-path-2 { animation-delay: 0.3s; }
-        .loader-path-3 { animation-delay: 0.6s; }
-
-        @keyframes drawPath {
-            to { stroke-dashoffset: 0; }
         }
 
         .loader-wordmark {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1rem;
-            font-weight: 300;
-            letter-spacing: 0.5em;
-            text-transform: uppercase;
+            font-size: 1.05rem; font-weight: 300;
+            letter-spacing: 0.5em; text-transform: uppercase;
             color: var(--gold);
             opacity: 0;
-            animation: loaderWordmark 0.8s ease 1.2s forwards;
+            animation: fadeUp 0.7s ease 0.9s forwards;
         }
-
-        @keyframes loaderWordmark {
-            from { opacity: 0; transform: translateY(8px); }
-            to   { opacity: 0.85; transform: translateY(0); }
-        }
-
         .loader-sub {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.55rem;
-            font-weight: 400;
-            letter-spacing: 0.4em;
-            text-transform: uppercase;
+            font-size: 0.55rem; font-weight: 400;
+            letter-spacing: 0.4em; text-transform: uppercase;
             color: rgba(212,175,106,0.4);
+            margin-top: -1rem;
             opacity: 0;
-            animation: loaderWordmark 0.8s ease 1.5s forwards;
+            animation: fadeUp 0.7s ease 1.1s forwards;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         /* Progress bar */
         .loader-bar-track {
-            width: 80px;
-            height: 1px;
+            width: 80px; height: 1px;
             background: rgba(212,175,106,0.15);
-            border-radius: 999px;
-            overflow: hidden;
+            border-radius: 999px; overflow: hidden;
             opacity: 0;
-            animation: loaderWordmark 0.4s ease 0.8s forwards;
+            animation: fadeUp 0.4s ease 0.8s forwards;
         }
-
         .loader-bar-fill {
-            height: 100%;
-            background: var(--gold);
-            border-radius: 999px;
-            width: 0%;
-            animation: loaderBar 1.6s cubic-bezier(0.4,0,0.2,1) 0.8s forwards;
+            height: 100%; width: 0%;
+            background: var(--gold); border-radius: 999px;
+            animation: fillBar 1.8s cubic-bezier(0.4,0,0.2,1) 0.8s forwards;
         }
+        @keyframes fillBar { to { width: 100%; } }
 
-        @keyframes loaderBar {
-            to { width: 100%; }
-        }
-
-        /* ── NAV ─────────────────────────────────────────────────────── */
+        /* ── NAV ──────────────────────────────────────────────────────── */
         .nav {
             position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-            padding: 0.875rem 2.5rem;
+            padding: 0.75rem 2.5rem;
             display: flex; justify-content: space-between; align-items: center;
-            background: rgb(239 235 228 / 0.9);
+            background: rgb(239 235 228 / 0.92);
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid rgb(0 0 0 / 0.06);
         }
-
         .nav-logo {
             display: flex; align-items: center; gap: 0.875rem;
             text-decoration: none; color: var(--dark);
         }
-
+        .nav-logo-img {
+            height: 46px; width: auto;
+            object-fit: contain;
+            /* Keep logo dark to match brand */
+            filter: brightness(0);
+        }
         .nav-wordmark {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 0.95rem;
-            font-weight: 400;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
+            font-size: 0.95rem; font-weight: 400;
+            letter-spacing: 0.18em; text-transform: uppercase;
             color: var(--dark);
         }
-
         .nav-links { display: flex; gap: 2.5rem; align-items: center; list-style: none; }
         .nav-links a { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; color: var(--stone); transition: color 0.3s; }
         .nav-links a:hover { color: var(--dark); }
         .nav-cta { color: var(--dark) !important; border-bottom: 2px solid var(--bronze); padding-bottom: 2px; font-weight: 700 !important; }
 
-        /* ── HERO ────────────────────────────────────────────────────── */
-        .hero {
-            min-height: 100vh;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            align-items: center;
-            padding: 6rem 4rem 4rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            gap: 4rem;
-        }
-
+        /* ── HERO ─────────────────────────────────────────────────────── */
+        .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 6rem 4rem 4rem; max-width: 1400px; margin: 0 auto; gap: 4rem; }
         .hero-eyebrow { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.35em; text-transform: uppercase; color: var(--bronze); margin-bottom: 1.5rem; }
         .hero-title { font-size: clamp(4rem, 7vw, 7rem); line-height: 1.0; font-weight: 400; margin-bottom: 2rem; }
         .hero-title em { font-style: italic; font-weight: 300; color: var(--stone); }
@@ -207,84 +162,25 @@
         .hero-btn { display: inline-flex; align-items: center; gap: 0.75rem; background: var(--dark); color: white; padding: 1rem 2rem; border-radius: 999px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; transition: background 0.3s, transform 0.3s; }
         .hero-btn:hover { background: var(--bronze); transform: scale(1.03); }
 
-        /* ── HERO IMAGE COL — Logo shape ─────────────────────────────── */
-        .hero-image-col {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            position: relative;
-            height: 520px;
-        }
+        /* Hero image col — versión anterior (arco + 2 laterales) */
+        .hero-image-col { display: flex; justify-content: flex-end; align-items: center; gap: 1rem; }
+        .hero-img-main { width: 60%; aspect-ratio: 3/4; border-radius: 999px 999px 0 0; overflow: hidden; box-shadow: 0 40px 80px rgb(0 0 0 / 0.18); }
+        .hero-img-side { display: flex; flex-direction: column; gap: 1rem; width: 35%; }
+        .hero-img-side-top, .hero-img-side-bottom { aspect-ratio: 1; border-radius: 1.5rem; overflow: hidden; box-shadow: 0 20px 40px rgb(0 0 0 / 0.12); }
+        .hero-img-main img, .hero-img-side-top img, .hero-img-side-bottom img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-        /* SVG mask container — mirrors logo proportions */
-        .hero-logo-images {
-            position: relative;
-            width: 380px;
-            height: 500px;
-        }
-
-        /* Shape containers use clip-path via inline SVG clipPath */
-        .hero-shape {
-            position: absolute;
-            overflow: hidden;
-        }
-
-        /* Main tall arch — left side */
-        .hero-arch-main {
-            left: 60px;
-            top: 0;
-            width: 200px;
-            height: 380px;
-            border-radius: 100px 100px 0 0;
-        }
-
-        /* Circle — overlaps left of arch */
-        .hero-circle {
-            left: 0px;
-            top: 180px;
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-        }
-
-        /* Small arch — right side */
-        .hero-arch-small {
-            left: 230px;
-            top: 130px;
-            width: 140px;
-            height: 250px;
-            border-radius: 70px 70px 0 0;
-        }
-
-        .hero-shape img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.8s cubic-bezier(0.16,1,0.3,1);
-        }
-
-        .hero-shape:hover img { transform: scale(1.06); }
-
-        /* Thin outline rings drawn as absolute SVG overlay */
-        .hero-outlines {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-        }
-
-        /* ── STATS ───────────────────────────────────────────────────── */
+        /* ── STATS ────────────────────────────────────────────────────── */
         .stats { background: var(--dark); color: white; padding: 3rem 4rem; display: flex; justify-content: center; gap: 6rem; flex-wrap: wrap; }
         .stat-item { text-align: center; }
         .stat-num { font-size: 2.8rem; font-weight: 400; display: block; line-height: 1; margin-bottom: 0.5rem; }
         .stat-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgb(255 255 255 / 0.45); }
 
-        /* ── SECTION HEADER ──────────────────────────────────────────── */
+        /* ── SECTION HEADER ───────────────────────────────────────────── */
         .section-header { text-align: center; margin-bottom: 4rem; }
         .section-eyebrow { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.35em; text-transform: uppercase; color: var(--bronze); display: block; margin-bottom: 1rem; }
         .section-title { font-size: clamp(2.5rem, 4vw, 4rem); font-weight: 400; line-height: 1.1; }
 
-        /* ── GALLERY ─────────────────────────────────────────────────── */
+        /* ── GALLERY ──────────────────────────────────────────────────── */
         #galeria { padding: 7rem 3rem; max-width: 1400px; margin: 0 auto; }
         .filter-tabs { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 3rem; flex-wrap: wrap; }
         .filter-btn { padding: 0.6rem 1.4rem; border: 1px solid rgb(0 0 0 / 0.12); border-radius: 999px; background: transparent; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.3s; font-family: 'DM Sans', sans-serif; color: var(--stone); }
@@ -298,17 +194,16 @@
         .gallery-item:hover .gallery-overlay { opacity: 1; }
         .gallery-tag { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: white; background: var(--bronze); padding: 0.3rem 0.75rem; border-radius: 999px; }
 
-        /* ── LIGHTBOX ────────────────────────────────────────────────── */
+        /* ── LIGHTBOX ─────────────────────────────────────────────────── */
         .lightbox { position: fixed; inset: 0; z-index: 1000; background: rgb(0 0 0 / 0.92); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s; }
         .lightbox.open { opacity: 1; pointer-events: all; }
         .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 1rem; }
         .lightbox-close { position: absolute; top: 1.5rem; right: 2rem; background: none; border: none; color: white; font-size: 2rem; cursor: pointer; }
         .lightbox-prev, .lightbox-next { position: absolute; top: 50%; transform: translateY(-50%); background: rgb(255 255 255 / 0.1); border: 1px solid rgb(255 255 255 / 0.2); color: white; width: 3rem; height: 3rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; transition: background 0.3s; }
         .lightbox-prev:hover, .lightbox-next:hover { background: var(--bronze); }
-        .lightbox-prev { left: 2rem; }
-        .lightbox-next { right: 2rem; }
+        .lightbox-prev { left: 2rem; } .lightbox-next { right: 2rem; }
 
-        /* ── SERVICIOS ───────────────────────────────────────────────── */
+        /* ── SERVICIOS ────────────────────────────────────────────────── */
         #servicios { background: var(--cream); padding: 7rem 3rem; }
         .services-inner { max-width: 1400px; margin: 0 auto; }
         .bento { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 260px; gap: 1rem; }
@@ -322,7 +217,7 @@
         .service-list li { font-size: 0.8rem; color: rgb(255 255 255 / 0.6); display: flex; align-items: center; gap: 0.5rem; }
         .service-list li::before { content: ''; width: 20px; height: 1px; background: var(--bronze-light); flex-shrink: 0; }
 
-        /* ── TESTIMONIOS ─────────────────────────────────────────────── */
+        /* ── TESTIMONIOS ──────────────────────────────────────────────── */
         #testimonios { padding: 7rem 3rem; max-width: 1400px; margin: 0 auto; }
         .testimonios-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
         .testimonio-card { background: var(--cream); border-radius: 1.5rem; padding: 2.5rem; border: 1px solid rgb(0 0 0 / 0.05); transition: transform 0.4s, box-shadow 0.4s; }
@@ -339,7 +234,7 @@
         .testimonio-card.featured .author-project { color: rgb(255 255 255 / 0.4); }
         .testimonio-quote { font-size: 5rem; line-height: 0.8; color: var(--bronze); margin-bottom: 1.5rem; display: block; }
 
-        /* ── CONTACTO ────────────────────────────────────────────────── */
+        /* ── CONTACTO ─────────────────────────────────────────────────── */
         #contacto { background: var(--dark); padding: 7rem 3rem; color: white; }
         .contacto-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
         .contacto-title { font-size: clamp(2.5rem, 4vw, 4rem); font-weight: 400; line-height: 1.1; margin-bottom: 1.5rem; }
@@ -358,28 +253,24 @@
         .cta-secondary { display: flex; align-items: center; justify-content: center; gap: 0.75rem; background: transparent; color: white; border: 1px solid rgb(255 255 255 / 0.2); padding: 1.25rem 2.5rem; border-radius: 999px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; transition: border-color 0.3s, background 0.3s; }
         .cta-secondary:hover { border-color: var(--bronze-light); background: rgb(255 255 255 / 0.04); }
 
-        /* ── FOOTER ──────────────────────────────────────────────────── */
+        /* ── FOOTER ───────────────────────────────────────────────────── */
         footer { background: #111; padding: 2.5rem 3rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
         footer p { font-size: 0.65rem; color: rgb(255 255 255 / 0.25); letter-spacing: 0.2em; text-transform: uppercase; }
         .footer-social a { font-size: 0.65rem; color: rgb(255 255 255 / 0.35); letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; transition: color 0.2s; }
         .footer-social a:hover { color: var(--bronze-light); }
 
-        /* ── WA FLOAT ────────────────────────────────────────────────── */
+        /* ── WA FLOAT ─────────────────────────────────────────────────── */
         .wa-float { position: fixed; bottom: 2rem; right: 2rem; background: var(--dark); color: white; padding: 0.875rem 1.5rem; border-radius: 999px; display: flex; align-items: center; gap: 0.625rem; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; z-index: 300; text-decoration: none; box-shadow: 0 8px 24px rgb(0 0 0 / 0.25); transition: background 0.3s, transform 0.3s; min-height: 44px; }
         .wa-float:hover { background: var(--bronze); transform: scale(1.05); }
 
-        /* ── REVEAL ──────────────────────────────────────────────────── */
+        /* ── REVEAL ───────────────────────────────────────────────────── */
         .reveal { opacity: 0; transform: translateY(40px); }
         @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
 
-        /* ── RESPONSIVE ──────────────────────────────────────────────── */
+        /* ── RESPONSIVE ───────────────────────────────────────────────── */
         @media (max-width: 1024px) {
             .hero { grid-template-columns: 1fr; padding: 5rem 2rem 3rem; }
-            .hero-image-col { justify-content: center; height: 420px; }
-            .hero-logo-images { width: 320px; height: 420px; }
-            .hero-arch-main { left: 50px; width: 170px; height: 320px; border-radius: 85px 85px 0 0; }
-            .hero-circle { left: 0; top: 155px; width: 136px; height: 136px; }
-            .hero-arch-small { left: 195px; top: 110px; width: 118px; height: 212px; border-radius: 59px 59px 0 0; }
+            .hero-image-col { justify-content: center; }
             .gallery-grid { columns: 3; }
             .bento { grid-template-columns: repeat(2, 1fr); }
             .testimonios-grid { grid-template-columns: 1fr 1fr; }
@@ -391,11 +282,8 @@
             .nav-links { display: none; }
             .hero { padding: 4.5rem 1.25rem 2rem; }
             .hero-title { font-size: 3rem; }
-            .hero-image-col { height: 340px; }
-            .hero-logo-images { width: 260px; height: 340px; }
-            .hero-arch-main { left: 40px; width: 138px; height: 260px; border-radius: 69px 69px 0 0; }
-            .hero-circle { left: 0; top: 126px; width: 110px; height: 110px; }
-            .hero-arch-small { left: 158px; top: 90px; width: 96px; height: 172px; border-radius: 48px 48px 0 0; }
+            .hero-img-side { display: none; }
+            .hero-img-main { width: 100%; }
             .gallery-grid { columns: 2; }
             #galeria, #servicios, #testimonios, #contacto { padding: 4rem 1.25rem; }
             .bento { grid-template-columns: 1fr; grid-auto-rows: 220px; }
@@ -409,87 +297,13 @@
 
 <!-- ── LOADING SCREEN ──────────────────────────────────────────────── -->
 <div id="loader" role="status" aria-label="Cargando Punto Interior">
-    <div class="loader-logo">
-        <div class="loader-glow"></div>
-        <div class="loader-glow-2"></div>
-        <!-- Logo SVG dorado animado -->
-        <svg class="loader-svg" viewBox="0 0 200 220" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <clipPath id="lArchClip">
-                    <rect x="55" y="10" width="120" height="200" rx="60"/>
-                </clipPath>
-                <clipPath id="lCircleClip">
-                    <circle cx="68" cy="165" r="52"/>
-                </clipPath>
-                <clipPath id="lSmArchClip">
-                    <rect x="115" y="88" width="68" height="130" rx="34"/>
-                </clipPath>
-                <clipPath id="lRightHalf">
-                    <rect x="115" y="10" width="60" height="200"/>
-                </clipPath>
-                <clipPath id="lLeftHalfC">
-                    <rect x="16" y="113" width="52" height="104"/>
-                </clipPath>
-            </defs>
-
-            <!-- Dot texture -->
-            <g clip-path="url(#lLeftHalfC)">
-                <g clip-path="url(#lCircleClip)">
-                    <g fill="#D4AF6A" opacity="0.5">
-                        <circle cx="26" cy="126" r="1.3"/><circle cx="38" cy="126" r="1.3"/><circle cx="50" cy="126" r="1.3"/><circle cx="62" cy="126" r="1.3"/>
-                        <circle cx="26" cy="138" r="1.3"/><circle cx="38" cy="138" r="1.3"/><circle cx="50" cy="138" r="1.3"/><circle cx="62" cy="138" r="1.3"/>
-                        <circle cx="26" cy="150" r="1.3"/><circle cx="38" cy="150" r="1.3"/><circle cx="50" cy="150" r="1.3"/><circle cx="62" cy="150" r="1.3"/>
-                        <circle cx="26" cy="162" r="1.3"/><circle cx="38" cy="162" r="1.3"/><circle cx="50" cy="162" r="1.3"/><circle cx="62" cy="162" r="1.3"/>
-                        <circle cx="26" cy="174" r="1.3"/><circle cx="38" cy="174" r="1.3"/><circle cx="50" cy="174" r="1.3"/><circle cx="62" cy="174" r="1.3"/>
-                        <circle cx="26" cy="186" r="1.3"/><circle cx="38" cy="186" r="1.3"/><circle cx="50" cy="186" r="1.3"/><circle cx="62" cy="186" r="1.3"/>
-                        <circle cx="26" cy="198" r="1.3"/><circle cx="38" cy="198" r="1.3"/><circle cx="50" cy="198" r="1.3"/><circle cx="62" cy="198" r="1.3"/>
-                    </g>
-                </g>
-            </g>
-
-            <!-- Wood grain texture -->
-            <g clip-path="url(#lRightHalf)">
-                <g clip-path="url(#lArchClip)">
-                    <g stroke="#D4AF6A" stroke-width="0.7" fill="none" opacity="0.4">
-                        <path d="M115,40 Q132,34 148,42 Q162,50 175,40"/>
-                        <path d="M115,56 Q133,48 150,58 Q164,68 175,56"/>
-                        <path d="M115,74 Q134,64 152,76 Q166,86 175,74"/>
-                        <path d="M115,94 Q136,82 154,96 Q168,108 175,94"/>
-                        <path d="M115,116 Q137,102 155,118 Q169,132 175,116"/>
-                        <path d="M115,140 Q138,124 156,142 Q170,158 175,140"/>
-                        <path d="M115,166 Q138,148 157,168 Q171,186 175,166"/>
-                        <path d="M115,194 Q139,174 158,196 Q172,214 175,194"/>
-                        <ellipse cx="152" cy="130" rx="8" ry="12" opacity="0.45"/>
-                        <ellipse cx="152" cy="130" rx="4" ry="7" opacity="0.35"/>
-                    </g>
-                </g>
-            </g>
-
-            <!-- Small arch grain -->
-            <g clip-path="url(#lSmArchClip)">
-                <g stroke="#D4AF6A" stroke-width="0.5" fill="none" opacity="0.3">
-                    <path d="M115,108 Q134,100 150,110 Q164,120 183,108"/>
-                    <path d="M115,126 Q135,116 152,128 Q166,140 183,126"/>
-                    <path d="M115,146 Q136,134 153,148 Q167,160 183,146"/>
-                    <path d="M115,168 Q137,154 154,170 Q168,184 183,168"/>
-                    <path d="M115,192 Q138,176 155,193 Q169,208 183,192"/>
-                </g>
-            </g>
-
-            <!-- Outlines — animated draw-on -->
-            <rect class="loader-path" x="55" y="10" width="120" height="200" rx="60" stroke="#D4AF6A" stroke-width="1.5" fill="none"/>
-            <circle class="loader-path loader-path-2" cx="68" cy="165" r="52" stroke="#D4AF6A" stroke-width="1.5" fill="none"/>
-            <rect class="loader-path loader-path-3" x="115" y="88" width="68" height="130" rx="34" stroke="#D4AF6A" stroke-width="1.5" fill="none"/>
-            <!-- Divider -->
-            <line x1="115" y1="10" x2="115" y2="210" stroke="#D4AF6A" stroke-width="0.8" opacity="0.25"/>
-        </svg>
+    <div class="loader-logo-wrap">
+        <div class="loader-ring loader-ring-1"></div>
+        <div class="loader-ring loader-ring-2"></div>
+        <img src="logo.png" alt="" class="loader-logo-img" aria-hidden="true">
     </div>
-
-    <div style="display:flex; flex-direction:column; align-items:center; gap:0.5rem;">
-        <span class="loader-wordmark">Punto Interior</span>
-        <span class="loader-sub">Alta Carpintería · León, Gto.</span>
-    </div>
-
+    <span class="loader-wordmark">Punto Interior</span>
+    <span class="loader-sub">Alta Carpintería · León, Gto.</span>
     <div class="loader-bar-track">
         <div class="loader-bar-fill"></div>
     </div>
@@ -498,54 +312,7 @@
 <!-- ── NAV ────────────────────────────────────────────────────────── -->
 <nav class="nav" aria-label="Navegación principal">
     <a href="/" class="nav-logo" aria-label="Punto Interior – Inicio">
-        <!-- Logo SVG nav — versión oscura compacta -->
-        <svg height="40" viewBox="0 0 200 220" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <defs>
-                <clipPath id="nArchClip"><rect x="55" y="10" width="120" height="200" rx="60"/></clipPath>
-                <clipPath id="nCircleClip"><circle cx="68" cy="165" r="52"/></clipPath>
-                <clipPath id="nSmArchClip"><rect x="115" y="88" width="68" height="130" rx="34"/></clipPath>
-                <clipPath id="nRightHalf"><rect x="115" y="10" width="60" height="200"/></clipPath>
-                <clipPath id="nLeftHalfC"><rect x="16" y="113" width="52" height="104"/></clipPath>
-            </defs>
-            <g clip-path="url(#nLeftHalfC)">
-                <g clip-path="url(#nCircleClip)">
-                    <g fill="#1C1C1A" opacity="0.45">
-                        <circle cx="26" cy="126" r="1.3"/><circle cx="38" cy="126" r="1.3"/><circle cx="50" cy="126" r="1.3"/><circle cx="62" cy="126" r="1.3"/>
-                        <circle cx="26" cy="138" r="1.3"/><circle cx="38" cy="138" r="1.3"/><circle cx="50" cy="138" r="1.3"/><circle cx="62" cy="138" r="1.3"/>
-                        <circle cx="26" cy="150" r="1.3"/><circle cx="38" cy="150" r="1.3"/><circle cx="50" cy="150" r="1.3"/><circle cx="62" cy="150" r="1.3"/>
-                        <circle cx="26" cy="162" r="1.3"/><circle cx="38" cy="162" r="1.3"/><circle cx="50" cy="162" r="1.3"/><circle cx="62" cy="162" r="1.3"/>
-                        <circle cx="26" cy="174" r="1.3"/><circle cx="38" cy="174" r="1.3"/><circle cx="50" cy="174" r="1.3"/><circle cx="62" cy="174" r="1.3"/>
-                        <circle cx="26" cy="186" r="1.3"/><circle cx="38" cy="186" r="1.3"/><circle cx="50" cy="186" r="1.3"/><circle cx="62" cy="186" r="1.3"/>
-                    </g>
-                </g>
-            </g>
-            <g clip-path="url(#nRightHalf)">
-                <g clip-path="url(#nArchClip)">
-                    <g stroke="#1C1C1A" stroke-width="0.7" fill="none" opacity="0.35">
-                        <path d="M115,40 Q132,34 148,42 Q162,50 175,40"/>
-                        <path d="M115,60 Q133,50 150,62 Q164,72 175,60"/>
-                        <path d="M115,82 Q134,70 152,84 Q166,94 175,82"/>
-                        <path d="M115,106 Q136,92 154,108 Q168,120 175,106"/>
-                        <path d="M115,132 Q137,116 155,134 Q169,150 175,132"/>
-                        <path d="M115,160 Q138,142 156,162 Q170,180 175,160"/>
-                        <path d="M115,190 Q139,170 158,192 Q172,210 175,190"/>
-                        <ellipse cx="152" cy="130" rx="8" ry="12" opacity="0.4"/>
-                    </g>
-                </g>
-            </g>
-            <g clip-path="url(#nSmArchClip)">
-                <g stroke="#1C1C1A" stroke-width="0.5" fill="none" opacity="0.25">
-                    <path d="M115,108 Q134,100 150,110 Q164,120 183,108"/>
-                    <path d="M115,130 Q135,118 152,132 Q166,144 183,130"/>
-                    <path d="M115,154 Q136,140 153,156 Q167,168 183,154"/>
-                    <path d="M115,180 Q137,164 154,182 Q168,196 183,180"/>
-                </g>
-            </g>
-            <rect x="55" y="10" width="120" height="200" rx="60" stroke="#1C1C1A" stroke-width="1.4" fill="none"/>
-            <circle cx="68" cy="165" r="52" stroke="#1C1C1A" stroke-width="1.4" fill="none"/>
-            <rect x="115" y="88" width="68" height="130" rx="34" stroke="#1C1C1A" stroke-width="1.4" fill="none"/>
-            <line x1="115" y1="10" x2="115" y2="210" stroke="#1C1C1A" stroke-width="0.7" opacity="0.25"/>
-        </svg>
+        <img src="logo.png" alt="Punto Interior" class="nav-logo-img">
         <span class="nav-wordmark">Punto Interior</span>
     </a>
     <ul class="nav-links">
@@ -567,37 +334,17 @@
             <span>💬</span><span>Solicitar cotización</span>
         </a>
     </div>
-
-    <!-- Hero images con forma del logo -->
     <div class="hero-image-col reveal">
-        <div class="hero-logo-images">
-
-            <!-- Arco principal — foto cocina -->
-            <div class="hero-shape hero-arch-main">
-                <img src="foto-08.png" alt="Cocina integral premium de Punto Interior" loading="eager" fetchpriority="high">
+        <div class="hero-img-main">
+            <img src="foto-08.png" alt="Cocina integral negra con iluminación LED de Punto Interior" loading="eager" fetchpriority="high" width="600" height="800">
+        </div>
+        <div class="hero-img-side">
+            <div class="hero-img-side-top">
+                <img src="foto-03.png" alt="Centro de entretenimiento flotante con vitrinas iluminadas" loading="eager" width="300" height="300">
             </div>
-
-            <!-- Círculo — foto centro TV -->
-            <div class="hero-shape hero-circle">
-                <img src="foto-10.png" alt="Centro de entretenimiento con vitrinas iluminadas" loading="eager">
+            <div class="hero-img-side-bottom">
+                <img src="foto-09.png" alt="Mueble de baño flotante con cubierta de mármol" loading="eager" width="300" height="300">
             </div>
-
-            <!-- Arco pequeño — foto mueble baño -->
-            <div class="hero-shape hero-arch-small">
-                <img src="foto-09.png" alt="Mueble de baño flotante con cubierta de mármol" loading="eager">
-            </div>
-
-            <!-- Outlines SVG superpuestos — espejo exacto del logo -->
-            <svg class="hero-outlines" viewBox="0 0 380 500" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <!-- Arco principal outline -->
-                <rect x="60" y="0" width="200" height="380" rx="100" stroke="rgb(28 28 26 / 0.12)" stroke-width="1.5" fill="none"/>
-                <!-- Círculo outline -->
-                <circle cx="80" cy="260" r="80" stroke="rgb(28 28 26 / 0.12)" stroke-width="1.5" fill="none"/>
-                <!-- Arco pequeño outline -->
-                <rect x="230" y="130" width="140" height="250" rx="70" stroke="rgb(28 28 26 / 0.12)" stroke-width="1.5" fill="none"/>
-                <!-- Línea divisoria -->
-                <line x1="160" y1="0" x2="160" y2="380" stroke="rgb(28 28 26 / 0.06)" stroke-width="1"/>
-            </svg>
         </div>
     </div>
 </section>
@@ -718,7 +465,7 @@
         </div>
         <div class="testimonio-card reveal">
             <div class="stars" aria-label="5 de 5 estrellas"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
-            <p class="testimonio-text">"El closet aprovecha cada centímetro. Los materiales se ven y se sienten de alta calidad. Muy satisfecha con el resultado."</p>
+            <p class="testimonio-text">"El closet aprovecha cada centímetro. Los materiales se ven y se sienten de alta calidad. Muy satisfecha."</p>
             <div class="testimonio-author">
                 <div class="author-avatar">PG</div>
                 <div><span class="author-name">Patricia Gutiérrez</span><span class="author-project">Vestidor a medida</span></div>
@@ -783,17 +530,14 @@
     <button class="lightbox-next" id="lightboxNext" aria-label="Siguiente">›</button>
 </div>
 
-<!-- ── SCRIPTS ────────────────────────────────────────────────────── -->
 <script>
-    /* Año */
     document.getElementById('js-year').textContent = new Date().getFullYear();
 
-    /* Loading screen — ocultar tras 2.6s */
+    /* Loading — ocultar tras animaciones (2.8s) */
     window.addEventListener('load', () => {
         setTimeout(() => {
-            const loader = document.getElementById('loader');
-            loader.classList.add('hidden');
-        }, 2600);
+            document.getElementById('loader').classList.add('hidden');
+        }, 2800);
     });
 
     /* Filtros galería */
@@ -833,7 +577,7 @@
         if (e.key==='ArrowRight') document.getElementById('lightboxNext').click();
     });
 
-    /* GSAP scroll reveals */
+    /* GSAP */
     window.addEventListener('load', () => {
         if (typeof ScrollTrigger === 'undefined') return;
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
