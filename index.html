@@ -554,6 +554,20 @@
         ════════════════════════════════════════════════════════════ */
         .contact { background: var(--color-dark); padding: var(--section-padding-y) var(--section-padding-x); color: white; }
 
+        /* Mapa a full ancho sobre el contenido */
+        .contact__map {
+            max-width: 1400px;
+            margin-inline: auto;
+            height: 340px;
+            overflow: hidden;
+            margin-bottom: 4rem;
+            border-radius: var(--radius-card);
+            opacity: 0.85;
+            transition: opacity var(--transition-base);
+        }
+        .contact__map:hover { opacity: 1; }
+        .contact__map iframe { width: 100%; height: 100%; border: 0; display: block; }
+
         .contact__inner { max-width: 1400px; margin-inline: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
 
         .contact__title { font-family: var(--font-serif); font-size: clamp(2.5rem, 4vw, 4rem); font-weight: 400; line-height: 1.1; margin-bottom: 1.5rem; }
@@ -626,6 +640,7 @@
             .testimonials__grid { grid-template-columns: 1fr; }
             .testimonial--featured { grid-row: span 1; }
             .footer { flex-direction: column; text-align: center; }
+            .contact__map { height: 220px; margin-bottom: 2.5rem; border-radius: 1rem; }
         }
     </style>
 </head>
@@ -849,6 +864,18 @@
 
     <!-- CONTACTO -->
     <section id="contacto" class="contact" aria-labelledby="contacto-heading">
+
+        <!-- Mapa full width -->
+        <div class="contact__map u-container" aria-label="Mapa del showroom">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3717.89!2d-101.6921647!3d21.1385026!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842bbf6a1fb10e05%3A0x52647fe25f8aa97b!2sAv.%20M%C3%A9xico%20701%2C%20Moderna%2C%2037328%20Le%C3%B3n%20de%20los%20Aldama%2C%20Gto.!5e0!3m2!1ses!2smx!4v1700000000000!5m2!1ses!2smx"
+                title="Showroom Punto Interior — Av México 701, Col. Moderna, León, Gto."
+                width="100%" height="100%"
+                allowfullscreen loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+
         <div class="contact__inner">
             <div class="u-reveal">
                 <h2 id="contacto-heading" class="contact__title u-serif">¿Listo para tu<br><em>próximo proyecto?</em></h2>
