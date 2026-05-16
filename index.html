@@ -272,7 +272,18 @@
             .hero { grid-template-columns: 1fr; padding: 5rem 2rem 3rem; }
             .hero-image-col { justify-content: center; }
             .gallery-grid { columns: 3; }
-            .bento { grid-template-columns: repeat(2, 1fr); }
+            .bento {
+                grid-template-columns: repeat(2, 1fr);
+                grid-auto-rows: auto;
+            }
+            .bento-card[style*="grid-column:span 2"],
+            .bento-card[style*="grid-column: span 2"] {
+                grid-column: span 2;
+                grid-row: span 1;
+                min-height: 320px;
+            }
+            .bento-photo { min-height: 220px; }
+            .bento-bronze, .bento-light { min-height: 200px; }
             .testimonios-grid { grid-template-columns: 1fr 1fr; }
             .testimonio-card.featured { grid-row: span 1; }
             .contacto-inner { grid-template-columns: 1fr; gap: 3rem; }
@@ -285,9 +296,30 @@
             .hero-img-side { display: none; }
             .hero-img-main { width: 100%; }
             .gallery-grid { columns: 2; }
-            #galeria, #servicios, #testimonios, #contacto { padding: 4rem 1.25rem; }
-            .bento { grid-template-columns: 1fr; grid-auto-rows: 220px; }
+            #galeria, #testimonios, #contacto { padding: 4rem 1.25rem; }
+
+            /* Servicios móvil — layout vertical limpio */
+            #servicios { padding: 3.5rem 1.25rem; }
+            .bento {
+                display: flex;
+                flex-direction: column;
+                gap: 0.875rem;
+            }
+            /* Tarjeta de texto principal — altura auto, sin grid-column/row */
+            .bento-card { border-radius: 1.25rem; }
+            .bento-card[style*="grid-column"] {
+                grid-column: unset !important;
+                grid-row: unset !important;
+            }
+            /* Fotos tienen altura fija */
+            .bento-photo { height: 220px; }
+            /* Tarjeta de texto — padding más compacto */
+            .bento-text { padding: 2rem; }
+            .bento-bronze { padding: 2rem; min-height: 140px; }
+            .bento-light { padding: 2rem; min-height: 140px; }
+
             .testimonios-grid { grid-template-columns: 1fr; }
+            .testimonio-card.featured { grid-row: span 1; }
             .stats { padding: 2rem 1.25rem; gap: 2rem; }
             footer { flex-direction: column; text-align: center; }
         }
